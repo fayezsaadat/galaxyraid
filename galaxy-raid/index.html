@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#07080f" />
+  <title>Galaxy Raid — Orbit Desk</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- DASHBOARD -->
+    <section id="dash-screen" class="screen active">
+      <div class="dash-top">
+        <div>
+          <div class="brand">GALAXY RAID</div>
+          <div class="studio">Orbit Desk · build 1.6.3</div>
+        </div>
+        <div class="meta">
+          <span class="chip">اعتبار <b id="credits">0</b></span>
+          <span class="chip">سطح خلبان <b id="plevel">1</b></span>
+          <span class="chip">بهترین <b id="bestscore">0</b></span>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <div class="card pilot">
+          <h3>جنگنده فعال</h3>
+          <div id="pilot-art"></div>
+          <h2 id="pilot-name">شهاب</h2>
+          <div class="role" id="pilot-role">متعادل</div>
+          <div class="stat"><span>جان</span></div>
+          <div class="bar"><span id="stat-hp"></span></div>
+          <div class="stat"><span>سرعت</span></div>
+          <div class="bar"><span id="stat-sp"></span></div>
+          <div class="stat"><span>آتش</span></div>
+          <div class="bar"><span id="stat-fr"></span></div>
+          <div class="stat"><span>قدرت</span></div>
+          <div class="bar"><span id="stat-dm"></span></div>
+        </div>
+        <div class="card center-play">
+          <div class="stage-name" id="stage-label">مدار کابل</div>
+          <button class="play-btn" id="btn-play">PLAY</button>
+          <div class="sub">روی موبایل بکش تا بپری · دکمهٔ ویژه پایین راست</div>
+        </div>
+        <div class="card nav-col">
+          <h3>فرماندهی</h3>
+          <button class="nav-btn" id="btn-chars"><i>◆</i> آشیانه جنگنده‌ها</button>
+          <button class="nav-btn" id="btn-stages"><i>◎</i> نقشه کهکشان</button>
+          <button class="nav-btn" id="btn-hangar"><i>▲</i> درخت ارتقا</button>
+          <button class="nav-btn" id="btn-settings"><i>⚙</i> تنظیمات</button>
+          <div class="records">
+            مأموریت‌ها: <b id="rec-runs">0</b><br />
+            کشتار کل: <b id="rec-kills">0</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHARACTERS -->
+    <section id="chars-screen" class="screen">
+      <div class="header-bar">
+        <button class="back" data-back>بازگشت</button>
+        <h1>آشیانه — انتخاب خلبان</h1>
+      </div>
+      <div class="cards-wrap" id="char-list"></div>
+    </section>
+
+    <!-- STAGES -->
+    <section id="stages-screen" class="screen">
+      <div class="header-bar">
+        <button class="back" data-back>بازگشت</button>
+        <h1>نقشه کهکشان</h1>
+      </div>
+      <div class="cards-wrap" id="stage-list"></div>
+    </section>
+
+    <!-- HANGAR UPGRADES -->
+    <section id="hangar-screen" class="screen">
+      <div class="header-bar">
+        <button class="back" data-back>بازگشت</button>
+        <h1>درخت ارتقا</h1>
+      </div>
+      <div class="cards-wrap" id="upgrade-list"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings-screen" class="screen">
+      <div class="header-bar">
+        <button class="back" data-back>بازگشت</button>
+        <h1>تنظیمات</h1>
+      </div>
+      <div class="card" style="max-width:480px;margin:0 24px;">
+        <div class="settings-row">
+          <span>درجه سختی</span>
+          <select id="diff-select">
+            <option value="easy">آسان</option>
+            <option value="normal">عادی</option>
+            <option value="hard">سخت</option>
+            <option value="insane">دیوانه‌وار</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span>موسیقی</span>
+          <input type="range" id="vol-music" min="0" max="100" value="40" />
+        </div>
+        <div class="settings-row">
+          <span>افکت صدا</span>
+          <input type="range" id="vol-sfx" min="0" max="100" value="70" />
+        </div>
+        <p class="muted" style="margin:12px 0">سی دقیقه مأموریت در ۳۰ کهکشان کاتالوگ‌شده. ذخیره محلی است.</p>
+        <button class="btn" id="btn-reset">پاک کردن ذخیره</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="game-screen" class="screen">
+      <div id="canvas-wrap">
+        <canvas id="game" width="480" height="720"></canvas>
+        <div id="touch-ui">
+          <button type="button" id="t-left" aria-label="چپ">‹</button>
+          <button type="button" id="t-special" aria-label="ویژه">✦</button>
+          <button type="button" id="t-right" aria-label="راست">›</button>
+        </div>
+        <div id="hud">
+          <div class="row">
+            <div class="hp-wrap">
+              <label>سپر بدنه</label>
+              <div class="hp"><span id="hp-bar"></span></div>
+              <div class="special"><span id="sp-bar"></span></div>
+            </div>
+            <div class="hud-score">
+              <div id="hud-stage">—</div>
+              <div>SCORE <span id="hud-score">0</span></div>
+              <div>WAVE <span id="hud-wave">1</span></div>
+            </div>
+          </div>
+          <div class="row" style="pointer-events:auto;justify-content:flex-end">
+            <button class="back" id="btn-pause">توقف</button>
+          </div>
+        </div>
+        <div class="overlay" id="ov-pause">
+          <div class="box">
+            <h2>PAUSE</h2>
+            <p>مأموریت متوقف شد</p>
+            <button id="btn-resume">ادامه</button>
+            <button id="btn-quit">داشبورد</button>
+          </div>
+        </div>
+        <div class="overlay" id="ov-end">
+          <div class="box">
+            <h2 id="end-title">GAME OVER</h2>
+            <p id="end-body"></p>
+            <button id="btn-again">دوباره</button>
+            <button id="btn-tomenu">داشبورد</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
